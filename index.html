@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Tasks</title>
+
+<link rel="stylesheet" type="text/css" media="all" href="http://code.jquery.com/ui/1.8.19/themes/base/jquery-ui.css" />
+<link rel="stylesheet" type="text/css" media="all" href="css/bootstrap.css" />
+<link rel="stylesheet" type="text/css" media="all" href="css/main.css" />
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.18/jquery-ui.min.js"></script>
+<script type="text/javascript" src="js/lib/bootstrap.js"></script>
+<script type="text/javascript" src="js/lib/jquery.json-2.3.min.js"></script>
+<script type="text/javascript" src="js/lib/jquery.textchange.min.js"></script>
+<script type="text/javascript" src="js/util.js"></script>
+<script type="text/javascript" src="js/data/ChangeManager.js"></script>
+<script type="text/javascript" src="js/data/TaskDataMgr.js"></script>
+<script type="text/javascript" src="js/ui/TasksData.js"></script>
+<script type="text/javascript" src="js/ui/TasksUI.js"></script>
+
+</head>
+
+<body>
+
+<div id="templates" class="template">
+	<div class="tasklist-entry nonselectable-markup"></div>
+	<div class="task-item"><div class="task-item-row">
+    	<input type="text" class="task-title"></input>
+    </div></div>
+    
+	<span class="tag-item tag-checkbox tpl-checkbox-completed"><img src="img/completed.png" /></span>
+	<span class="tag-item tag-checkbox tpl-checkbox-incomplete"><img src="img/incomplete.png" /></span>
+	<span class="tag-item tpl-starred"><img src="img/star.png" /></span>
+    <div class="indent"></div>
+</div>
+
+<div id="sel-indicator"><img src="img/selector.png" /></div>
+<div id="content">
+    <div id="toolbar">
+        <div id="list-heading"></div>
+        <div id="sel-list-mode" class="btn-group">
+          <button class="btn">MI</button>
+          <button class="btn btn-primary">All</button>
+        </div>
+        <div class="toolbar-btns">
+            <a class="btn btn-small" action="outdent"><img src="img/arrow_left.png" /></a>
+            <a class="btn btn-small" action="indent"><img src="img/arrow_right.png" /></a>
+            <div class="toolbar-spacer"></div>
+            <a class="btn btn-small" action="add"><img src="img/bullet_add.png" /></a>
+            <a class="btn btn-small" action="delete"><img src="img/bullet_delete.png" /></a>
+        </div>
+    </div>
+    
+    <div id="list-content">
+        <div id="list-frame"><div style="display:table-row">
+            <div id="tasklist-toc">
+                <div class="toc"></div>
+            </div>
+            <div id="tasks-list"></div>
+        </div></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+$(function() {
+	var taskDataMgr = new TaskDataMgr();
+	var taskListUI = new TaskListUI(taskDataMgr);
+	var toolbarUI = new ToolbarUI(taskListUI);
+	taskDataMgr.getTaskLists();
+	
+	$("#sel-list-mode button").click(function(event) {
+		$("#sel-list-mode button").removeClass("btn-primary");
+		$(event.target).addClass("btn-primary");
+		taskListUI.getTaskListModel().onChangeListMode($(event.target).text());
+	});
+	
+	// forward keyboard events received by the document
+	// to the selected TaskList object for handling
+	$(document).keydown(function(event) {
+		taskListUI.handleKeyDown(event);
+	});
+});
+
+</script>
+</body>
+</html>

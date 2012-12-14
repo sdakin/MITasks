@@ -1,0 +1,150 @@
+html {
+	height: 100%;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+}
+
+.nonselectable-markup { 
+	-moz-user-select: none; 
+	-khtml-user-select: none; 
+	-webkit-user-select: none; 
+	-o-user-select: none; 
+}
+
+#content {
+	width:100%;
+	height:100%;
+	position:relative;
+}
+
+#toolbar {
+	padding:10px;
+	position:absolute;
+	top:0px;
+	z-index:1;
+}
+
+#toolbar>div {
+	display:inline-block;
+}
+
+.toolbar-btns {
+	padding-left:10px;
+}
+
+.toolbar-btns>a {
+	padding:2px 4px;
+}
+
+.toolbar-spacer {
+	display:inline-block;
+	width:5px;
+}
+
+#list-heading {
+	width:210px;
+}
+
+#list-content {
+	display:block;
+	position:absolute;
+	top:0px;
+	width:100%;
+	height:100%;
+	font-family:Tahoma, Geneva, sans-serif;
+	font-size:.85em;
+	z-index:0;
+}
+
+#list-frame {
+	display:table;
+	width:100%;
+	height:100%;
+	padding:50px 10px 10px;
+}
+
+#tasklist-toc {
+	display:table-cell;
+	width:202px;
+	padding-right:10px;
+}
+
+#tasklist-toc .toc {
+	display:block;
+	vertical-align:top;
+	border:solid 1px;
+	height:100%;
+}
+
+.tasklist-entry {
+	padding:3px 5px;
+	cursor:default;
+	font-size:1.2em;
+}
+
+#tasks-list {
+	display:table-cell;
+	vertical-align:top;
+	border:solid 1px;
+	padding-left:10px;
+}
+
+#sel-indicator {
+	position:absolute;
+	display:none;
+}
+
+.indent {
+	width:20px;
+	display:inline-block;
+}
+
+.task-item {
+	display:table;
+}
+
+.selected {
+	background-color:#FF9;
+}
+
+.task-item-row {
+	display:table-row;
+	height:20px;
+}
+
+.tag-item {
+	display: table-cell;
+	vertical-align: middle;
+	width:20px;
+}
+
+.tag-checkbox {
+	cursor:pointer;
+}
+
+.task-heading {
+	font-weight:bold;
+}
+
+input.task-title,input.task-title:focus {
+	display: table-cell;
+	vertical-align: middle;
+	border: none;
+	box-shadow: none;
+	margin:0px;
+	padding:0px;
+	font:inherit;
+	width:400px;
+}
+
+.title-prompt {
+	font-style:italic;
+}
+
+.template {
+	display:none;
+}
