@@ -1,22 +1,95 @@
-//-----------------------------------------------
-//		ChangeManager component
-//    
-//    	uses: jquery.json-2.3.min.js
+/**
+ * The ChangeManager module optimizes the sending of changes to a
+ * remote server by queueing them up and sending them in batches
+ * after a certain amount of time has passed since either no change
+ * was queued or a maximum delay threshold has been reached.
+ *
+ * @module ChangeManager
+ * @uses jquery
+ * @uses jquery.json-2.3.min.js
+ * @uses util.js (for EventTarget)
+ */
 
-//-----------------------------------------------
-// ChangeObject
-
+/**
+ * Base class for all objects managed by the ChangeManager.
+ *
+ * @class ChangeObject
+ * @constructor
+ * @param spec a hash that is used to initialize this ChangeObject
+ */
 function ChangeObject(spec) {
-	for (var prop in spec)
-		this[prop] = spec[prop];
+	$.extend(this, spec);
 }
 
+/**
+ * Accessor for retrieving the id property of the ChangeObject.
+ * Classes that extend ChangeManager can override this method
+ * to return a customized id.
+ *
+ * @method getID
+ * @return the id property of this ChangeObject
+ */
 ChangeObject.prototype.getID = function() { return this.id; }
 
 
-//-----------------------------------------------
-// ChangeManager
-// Inherits from EventTarget
+/**
+ * The class that manages changes for an application. This is intended to
+ * be a singleton but there is no reason why an application cannot use
+ * multiple ChangeManager instances.
+ *
+ * @class ChangeManager
+ * @extends EventTarget
+ * @constructor
+ */
+function ChangeManager() {
+	EventTarget.call(this);
+
+	/**
+	 * The timer that keeps track of the delay between checks for
+	 * whether to send any pending changes to the server.
+	 *
+	 * @property changeTimer
+	 * @type Timer
+	 */
+	this.changeTimer = null;
+
+	/**
+	 * The timestamp of the last time a change was queued.
+	 *
+	 * @property lastChangeTime
+	 * @type Number (Javascript time)
+	 */
+	this.lastChangeTime = null;
+
+	/**
+	 * The timestamp of the last time changes were sent to the server.
+	 * This is used to create an upper bound on the longest time the
+	 * ChangeManager will wait before sending pending changes.
+	 *
+	 * @property lastSendTime
+	 * @type Number (Javascript time)
+	 */
+	this.lastSendTime = null;
+
+	/**
+	 * A hash of the changes that have been queued. The key of the hash is
+	 * each ChangeObject's id and the value is the ChangeObject itself.
+	 *
+	 * @property pendingChanges
+	 * @type Object
+	 */
+	this.pendingChanges = {};
+
+	/**
+	 * An array of the changes to be sent to the server. This is different
+	 * from the pendingChanges object in that it keeps track of the changes
+	 * that have been sent to the server.
+	 *
+	 * @property changesToSend
+	 * @type Array
+	 */
+	this.changesToSend = [];
+}
 
 ChangeManager.prototype = new EventTarget();
 ChangeManager.prototype.constructor = ChangeManager;
@@ -25,25 +98,10 @@ ChangeManager.prototype.constructor = ChangeManager;
 ChangeManager.CHANGES_QUEUED = "ChangesQueued";		// { count: Number }
 ChangeManager.SEND_CHANGES = "SendChanges";			// { changes: [ {}, ... ], pendingCount: Number }
 
-// ChangeManager constructor
-function ChangeManager() {
-	EventTarget.call(this);
-
-	// data members
-	this.changeTimer = null;
-	this.lastChangeTime = null;
-	this.lastSendTime = null;
-	this.pendingChanges = {};
-	this.changesToSend = [];
-}
-
 // ChangeManager object properties
 ChangeManager.prototype.checkDelay = 1000;
 ChangeManager.prototype.sendDelay = 5000;
 ChangeManager.prototype.maxSendDelay = 30000;
-//ChangeManager.prototype.prefsTimer = null;
-//ChangeManager.prototype.pendingPrefs = null;
-//ChangeManager.prototype.sendAllCallback = null;
 
 // Adds a change to the queue or updates one if it's already in the queue
 // and then fires a CHANGES_QUEUED event.
@@ -112,7 +170,7 @@ ChangeManager.prototype.checkChanges = function () {
 
 ChangeManager.prototype.sendChanges = function(changes, pendingCount) {
 	var changeEvent = { type: ChangeManager.SEND_CHANGES,
-						changes: this.changesToSend, 
+						changes: changes, 
 						pendingCount: pendingChangeCount };
 	this.fire(changeEvent);
 }
@@ -167,13 +225,6 @@ ChangeManager.prefsSent = function() {
 	console.log("prefs sent.");
 	if (changeMgr.sendAllCallback) {
 		changeMgr.sendAllCallback();
-	}
-};
-
-ChangeManager.prototype.sendChanges = function(changes, callback) {
-	if (changes.length > 0) {
-		console.log("sending changes at: " + new Date().getTime());
-		this.saveIntentionScores(changes, callback);
 	}
 };
 */
